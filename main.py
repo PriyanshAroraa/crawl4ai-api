@@ -13,7 +13,7 @@ class CrawlRequest(BaseModel):
 
 async def scrape_content_and_links(url):
     async with AsyncWebCrawler() as crawler:
-        result = await crawler.arun(url=url)
+        result = await crawler.arun(url=url, crawling_strategy="http")
         page_text = result.markdown
         links = []
         if result and hasattr(result, "data") and result.data:
