@@ -1,23 +1,30 @@
+# Use official Python base image
 FROM python:3.11-slim
 
-# Install OS dependencies required by Playwright Chromium
-RUN apt-get update && apt-get install -y wget gnupg curl libnss3 libatk1.0-0 libatk-bridge2.0-0 libgtk-3-0 libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libasound2 libpangocairo-1.0-0 libcups2 libxss1 fonts-liberation libappindicator3-1 lsb-release libnss3-dev libxshmfence1
+# Set environment variables
+ENV PYTHONDONTWRITEBYTECODE=1
+ENV PYTHONUNBUFFERED=1
 
 # Set working directory
 WORKDIR /app
 
-# Copy and install Python dependencies
+# Install system dependencies required by Playwright
+RUN apt-get update && apt-get install -y \
+    wget gnupg libnss3 libatk1.0-0 libatk-bridge2.0-0 libcups2 libdrm2 libxkbcommon0 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libpango-1.0-0 libpangocairo-1.0-0 fonts-liberation libasound2 libxshmfence1 xvfb
+
+# Copy requirements and install Python dependencies
 COPY requirements.txt .
-RUN pip install --upgrade pip && pip install -r requirements.txt
+RUN pip install --upgrade pip
+RUN pip install -r requirements.txt
 
-# Install Playwright Chromium browsers
-RUN python -m playwright install --with-deps chromium
+# Install Playwright browsers
+RUN playwright install --with-deps chromium
 
-# Copy the rest of your project
+# Copy the rest of the code
 COPY . .
 
-# Expose the application port
-EXPOSE 8000
+# Expose port
+EXPOSE 10000
 
-# Start command
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Run the app
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "10000"]
