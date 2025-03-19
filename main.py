@@ -4,9 +4,17 @@ import asyncio
 from fastapi import FastAPI
 from pydantic import BaseModel
 from crawl4ai import AsyncWebCrawler
+from fastapi.middleware.cors import CORSMiddleware
 
 nest_asyncio.apply()
 app = FastAPI()
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # <-- allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 class CrawlRequest(BaseModel):
     url: str
