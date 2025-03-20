@@ -8,7 +8,6 @@ from crawl4ai import AsyncWebCrawler
 nest_asyncio.apply()
 app = FastAPI()
 
-# ✅ Add CORS middleware to avoid browser errors
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
@@ -25,7 +24,6 @@ async def scrape_content_and_links(url):
         result = await crawler.arun(url=url)
         page_text = result.markdown
         links = []
-        # Crawl4AI might return URLs in result.data list
         if result and hasattr(result, "data") and result.data:
             for page in result.data:
                 if "url" in page:
@@ -34,6 +32,7 @@ async def scrape_content_and_links(url):
 
 @app.post("/scrape")
 async def scrape(request: CrawlRequest):
+    print(f"Scraping: {request.url}")
     text_content, links = await scrape_content_and_links(request.url)
     return {
         "url": request.url,
