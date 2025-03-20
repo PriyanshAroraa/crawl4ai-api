@@ -1,19 +1,17 @@
-# ✅ Start from official Playwright image (with Python + browsers + correct GLIBC)
+# ✅ Start from official Playwright image (includes browsers & correct GLIBC)
 FROM mcr.microsoft.com/playwright/python:v1.41.1-jammy
 
-# Set work directory
 WORKDIR /app
 
-# Copy requirements and install them
+# Copy and install requirements
 COPY requirements.txt .
 RUN pip install --upgrade pip
 RUN pip install -r requirements.txt
 
-# Copy your app code
+# Copy the rest of the app
 COPY . .
 
-# Expose port
 EXPOSE 10000
 
-# Start the server
+# Run the app
 CMD ["uvicorn", "main:app", "--host=0.0.0.0", "--port=10000"]
