@@ -2,4 +2,3 @@ fastapi
 uvicorn
 crawl4ai
 nest_asyncio
-playwright
