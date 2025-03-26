@@ -1,4 +1,4 @@
-FROM mcr.microsoft.com/playwright/python:v1.41.1-jammy
+FROM mcr.microsoft.com/playwright/python:v1.51.1-jammy
 
 WORKDIR /app
 COPY requirements.txt .
